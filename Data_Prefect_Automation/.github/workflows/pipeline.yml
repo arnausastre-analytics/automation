@@ -1,0 +1,31 @@
+name: Logistics Prefect Pipeline
+
+on:
+  workflow_dispatch:  # manual run
+
+jobs:
+  run:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          pip install prefect pandas numpy
+
+      - name: Run Prefect pipeline
+        run: |
+          python scripts/prefect_pipeline.py
+
+      - name: Upload output report
+        uses: actions/upload-artifact@v4
+        with:
+          name: kpi-report
+          path: outputs/kpi_report.csv
