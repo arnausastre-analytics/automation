@@ -1,0 +1,34 @@
+name: Weekly Financial Report Bot
+
+on:
+  schedule:
+    - cron: '0 7 * * 1'  # Todos los lunes a las 07:00 UTC
+  workflow_dispatch:
+
+jobs:
+  generate-report:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v3
+
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: 3.10
+
+      - name: Install dependencies
+        run: |
+          pip install pandas numpy matplotlib weasyprint
+
+      - name: Run report generation
+        run: |
+          mkdir -p reports
+          python scripts/generate_financial_report.py
+
+      - name: Upload PDF report
+        uses: actions/upload-artifact@v4
+        with:
+          name: financial-report
+          path: reports/financial_report.pdf
