@@ -35,7 +35,7 @@ def analyze_data(path):
 
 @task
 def notify(results):
-    print("✅ Report generado:")
+    print("Report generado:")
     print(results)
 
 @flow(name="Delivery KPI Pipeline")
