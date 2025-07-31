@@ -1,8 +1,8 @@
-# 💼 Bot de Reporte Financiero Automatizado
+# Bot de Reporte Financiero Automatizado
 
 Este proyecto simula un bot financiero que genera y entrega informes semanales con datos financieros clave: ingresos, gastos, margen y beneficios.
 
-## 📊 ¿Qué hace?
+## ¿Qué hace?
 
 - Simula un histórico financiero de 6 meses.
 - Calcula margen de beneficio, ingresos, gastos.
@@ -10,12 +10,12 @@ Este proyecto simula un bot financiero que genera y entrega informes semanales c
 - Crea un informe profesional en PDF.
 - Automatiza su entrega cada lunes.
 
-## 🛠️ Stack
+## Stack
 
-- Python, pandas, matplotlib, weasyprint
+- Python, pandas, matplotlib y weasyprint
 - GitHub Actions
 
-## 👨‍💼 Ideal para:
+## Ideal para:
 
 - CFOs de pequeñas empresas
 - Despachos contables
