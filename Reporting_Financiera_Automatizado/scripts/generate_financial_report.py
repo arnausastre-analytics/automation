@@ -58,4 +58,4 @@ if __name__ == "__main__":
     plot_financials(df)
     create_html(df)
     generate_pdf()
-    print("✅ Informe generado en reports/financial_report.pdf")
+    print("Informe generado en reports/financial_report.pdf")
