@@ -1,0 +1,53 @@
+name: Price Monitor
+
+on:
+  workflow_dispatch:
+  schedule:
+    # Todos los días a las 08:05 UTC (ajusta a tu gusto)
+    - cron: "5 8 * * *"
+
+jobs:
+  run-monitor:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # para commitear historia de precios si se desea
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pandas requests beautifulsoup4 lxml python-dateutil tenacity python-dotenv
+
+      - name: Run price monitor
+        env:
+          # umbral para alertar cuando competidor es más barato que nosotros (en %)
+          PRICE_DELTA_PCT: ${{ secrets.PRICE_DELTA_PCT }} # ej: "10"
+          # webhook opcional de Slack (crear como secret en el repo)
+          SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+          # email opcional (SMTP)
+          SMTP_HOST: ${{ secrets.SMTP_HOST }}
+          SMTP_PORT: ${{ secrets.SMTP_PORT }}
+          SMTP_USER: ${{ secrets.SMTP_USER }}
+          SMTP_PASS: ${{ secrets.SMTP_PASS }}
+          EMAIL_TO:   ${{ secrets.EMAIL_TO }}
+        run: |
+          python scripts/price_monitor.py --config config/targets.csv --outdir outputs
+
+      # (Opcional) commit de outputs/ al repo para histórico
+      - name: Commit outputs
+        if: always()
+        run: |
+          if [ -n "$(git status --porcelain)" ]; then
+            git config user.name "github-actions[bot]"
+            git config user.email "github-actions[bot]@users.noreply.github.com"
+            git add outputs || true
+            git commit -m "chore: update price history and alerts [skip ci]" || true
+            git push
+          fi
